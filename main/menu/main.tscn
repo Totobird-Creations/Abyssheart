@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/shader/interface/split.tres" type="Shader" id=1]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/angle = 0.1
+shader_param/offset = 0.65
+shader_param/border_width = 0.01
+shader_param/background = Color( 0.25, 0.25, 0.25, 0.9 )
+shader_param/border = Color( 0.375, 0.375, 0.375, 1 )
+shader_param/flip = true
+
+[node name="main" type="Spatial"]
+
+[node name="canvas" type="CanvasLayer" parent="."]
+
+[node name="background" type="ColorRect" parent="canvas"]
+material = SubResource( 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0

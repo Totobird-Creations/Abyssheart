@@ -1,0 +1,40 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+
+
+
+uniform float angle        : hint_range(-25.0, 25.0) = 0.0;
+uniform float offset       : hint_range(0.0, 1.0)    = 0.5;
+uniform float border_width : hint_range(0.0, 1.0)    = 0.01;
+uniform vec4  background   : hint_color              = vec4(vec3(0.25), 0.9);
+uniform vec4  border       : hint_color              = vec4(vec3(0.375), 1.0);
+uniform bool  flip                                   = false;
+
+
+
+void fragment() {
+	if (! flip) {
+		if (UV.x + angle * UV.y > offset) {
+			if (UV.x + angle * UV.y < offset + border_width) {
+				COLOR = border;
+			} else {
+				COLOR = background;
+			}
+		} else {
+			COLOR.a = 0.0;
+		}
+	} else {
+		if (1.0 - UV.x + angle * UV.y > offset) {
+			if (1.0 - UV.x + angle * UV.y < offset + border_width) {
+				COLOR = border;
+			} else {
+				COLOR = background;
+			}
+		} else {
+			COLOR.a = 0.0;
+		}
+	}
+}
+"

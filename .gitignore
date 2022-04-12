@@ -5,6 +5,7 @@
 export_presets.cfg
 .import/
 **/*.import
+addons/multirun
 discord_sdk/*.gdns
 discord_sdk/*.gdnlib
 discord_sdk/*.gd

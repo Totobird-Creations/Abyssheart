@@ -9,19 +9,20 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Reference",
-"class": "Discord",
+"base": "Entity",
+"class": "PlayerEntity",
 "language": "GDScript",
-"path": "res://discord_sdk/discord.gd"
+"path": "res://main/game/entity/player.gd"
 } ]
 _global_script_class_icons={
-"Discord": ""
+"PlayerEntity": ""
 }
 
 [application]
 
 config/name="Abyssheart"
 config/description="A survival game, taking place within a cave."
+run/main_scene="res://main/menu/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="totobird_creations.abyssheart"
 boot_splash/image="res://assets/texture/empty.png"
@@ -32,21 +33,29 @@ config/windows_native_icon="res://icon.png"
 
 [autoload]
 
-Tool="*res://main/global/tool.gd"
-DiscordContact="*res://main/global/discord_contact.gd"
+DiscordLink="*res://main/global/discord_link.gd"
 
 [debug]
 
 gdscript/warnings/return_value_discarded=false
+multirun/number_of_windows=2
+multirun/window_distance=1270
+multirun/add_custom_args=true
+multirun/first_window_args="listen"
+multirun/other_window_args="join"
 
 [display]
 
-window/size/width=2048
-window/size/height=1200
+window/size/width=3072
+window/size/height=1800
 window/size/test_width=1024
 window/size/test_height=600
 window/stretch/mode="2d"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/multirun/plugin.cfg" )
 
 [input]
 

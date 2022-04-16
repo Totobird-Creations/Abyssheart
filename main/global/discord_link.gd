@@ -17,29 +17,28 @@ enum NotificationType {
 
 enum GameState {
 	Menu,
-	GameSingle,
 	GameHost,
 	GameClient
 }
-var game_state           : int        = GameState.Menu setget set_game_state
-var next_game_state      : int
-var start                : int        = OS.get_unix_time()
+var game_state           : int                           = GameState.Menu setget set_game_state
+var start                : int                           = OS.get_unix_time()
 
-var notification_queue   : Array      = []
-var notification_current : Dictionary = {}
+var notification_queue   : Array                         = []
+var notification_current : Dictionary                    = {}
 
-var is_hosting           : bool       = false
-var join_secret          : String
+var network_peer         : NetworkedMultiplayerGodotcord
 
 
 
 
 
-func set_game_state(value : int) -> void:
+func set_game_state(value : int, secret : String = "") -> void:
 	if (value != game_state):
+		# Clean up previous state
 		match (game_state):
 
 			GameState.Menu:
+				# Remove discord inactive notification.
 				var new_notification_queue := []
 				for notification in notification_queue:
 					if (notification.type != NotificationType.DiscordInactive):
@@ -49,6 +48,7 @@ func set_game_state(value : int) -> void:
 					notification_dismiss()
 
 			GameState.GameHost:
+				# Remove join request notifications.
 				var new_notification_queue := []
 				for notification in notification_queue:
 					if (notification.type != NotificationType.JoinRequest):
@@ -56,32 +56,34 @@ func set_game_state(value : int) -> void:
 				notification_queue = new_notification_queue
 				if (len(notification_current.keys()) >= 1 && notification_current.type == NotificationType.JoinRequest):
 					notification_decline()
+				# Clear network peer.
+				if (discord_active):
+					network_peer.close_connection()
+					get_tree().network_peer = null
 
+		# Set new state
 		game_state = value
 
+		# Set up new state
+		match (game_state):
+
+			GameState.Menu:
+				get_tree().change_scene("res://main/menu/main.tscn")
+
+			GameState.GameHost:
+				if (discord_active):
+					network_peer = NetworkedMultiplayerGodotcord.new()
+					network_peer.create_lobby(10, false)
+					get_tree().network_peer = network_peer
+				get_tree().change_scene("res://main/game/world.tscn")
+
+			GameState.GameClient:
+				network_peer = NetworkedMultiplayerGodotcord.new()
+				network_peer.join_server_activity(secret)
+				get_tree().network_peer = network_peer
+				get_tree().change_scene("res://main/game/world.tscn")
+
 	update_activity()
-
-
-func get_activity_details(state : int) -> String:
-	match (state):
-		GameState.Menu       : return "Menu"
-		GameState.GameSingle : return "In Game"
-		GameState.GameHost   : return "In Game"
-		GameState.GameClient : return "In Game"
-	return ""
-
-
-func get_activity_state(state : int) -> String:
-	match (state):
-		GameState.Menu       : return ""
-		GameState.GameSingle : return "Singleplayer"
-		GameState.GameHost   :
-			if (get_tree().network_peer.get_current_members() > 1):
-				return "Multiplayer"
-			else:
-				return "Singleplayer"
-		GameState.GameClient : return "Multiplayer"
-	return ""
 
 
 
@@ -167,23 +169,52 @@ func update_activity() -> void:
 			GameState.Menu:
 				pass
 			GameState.GameHost:
-				assert(get_tree().network_peer.get_connection_status() == get_tree().network_peer.CONNECTION_CONNECTED)
-				print(get_tree().network_peer.get_lobby_id(), " ", get_tree().network_peer.get_lobby_secret())
-				activity.party_id      = str(get_tree().network_peer.get_lobby_id())
-				activity.join_secret   = get_tree().network_peer.get_lobby_secret()
-				activity.party_current = get_tree().network_peer.get_current_members()
-				activity.party_max     = get_tree().network_peer.get_max_members()
+				if (is_network_connected()):
+					activity.party_id      = str(get_tree().network_peer.get_lobby_id())
+					activity.join_secret   = get_tree().network_peer.get_lobby_activity_secret()
+					activity.party_current = get_tree().network_peer.get_current_members()
+					activity.party_max     = get_tree().network_peer.get_max_members()
 			GameState.GameClient:
-				activity.party_current = get_tree().network_peer.get_current_members()
-				activity.party_max     = get_tree().network_peer.get_max_members()
+				if (is_network_connected()):
+					activity.party_current = get_tree().network_peer.get_current_members()
+					activity.party_max     = get_tree().network_peer.get_max_members()
 		activity.start       = start
 		activity.large_image = "spore"
 
 		GodotcordActivityManager.set_activity(activity)
 
 
+func get_activity_details(state : int) -> String:
+	match (state):
+		GameState.Menu       : return "Menu"
+		GameState.GameHost   : return "In Game"
+		GameState.GameClient : return "In Game"
+	return ""
+
+
+func get_activity_state(state : int) -> String:
+	match (state):
+		GameState.Menu       : return ""
+		GameState.GameHost   :
+			if (is_network_connected()):
+				if (discord_active && get_tree().network_peer.get_current_members() > 1):
+					return "Multiplayer"
+				else:
+					return "Singleplayer"
+			else:
+				return "Loading"
+		GameState.GameClient:
+			if (is_network_connected()):
+				return "Multiplayer"
+			else:
+				return "Loading"
+	return ""
+
+
 func _exit_tree() -> void:
 	if (discord_active):
+		if (is_network_connected()):
+			network_peer.close_connection()
 		GodotcordActivityManager.clear_activity()
 
 
@@ -216,9 +247,9 @@ func notification_accept() -> void:
 		NotificationType.JoinRequest:
 			GodotcordActivityManager.send_request_reply(notification_current.user_id, GodotcordActivity.YES)
 		NotificationType.Invite:
-			join_lobby(notification_current.secret)
+			set_game_state(GameState.GameClient, notification_current.secret)
 		NotificationType.Join:
-			join_lobby(notification_current.secret)
+			set_game_state(GameState.GameClient, notification_current.secret)
 	notification_current = {}
 	$viewport/notification/toggle.play_backwards("main")
 	$viewport/notification/progress/timer.stop()
@@ -233,18 +264,21 @@ func notification_decline() -> void:
 	$viewport/notification/progress/timer.stop()
 	$viewport/notification/timeout.stop()
 
+func notification_reload() -> void:
+	get_tree().quit(0)
+
 func notification_dismiss() -> void:
 	notification_current = {}
 	$viewport/notification/toggle.play_backwards("main")
 	$viewport/notification/progress/timer.stop()
 	$viewport/notification/timeout.stop()
 
-func notification_reload() -> void:
-	get_tree().quit(0)
 
 
 
-func join_lobby(secret : String) -> void:
-	next_game_state = GameState.GameClient
-	join_secret = secret
-	get_tree().change_scene("res://main/game/world.tscn")
+
+func is_network_connected() -> bool:
+	return (
+		get_tree().network_peer &&
+		get_tree().network_peer.get_connection_status() == get_tree().network_peer.CONNECTION_CONNECTED
+	)

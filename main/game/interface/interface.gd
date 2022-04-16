@@ -9,10 +9,12 @@ var   thread      : Thread
 
 
 func _ready() -> void:
-	$pause/align/top_bottom/top/invite.disabled = ! DiscordLink.discord_active
+	$pause/align/top_bottom/top/invite.disabled = false
 	if (! DiscordLink.discord_active):
+		$pause/align/top_bottom/top/invite.disabled = true
 		$pause/align/top_bottom/top/invite.disabled_text = "Multiplayer Disabled"
-	elif (DiscordLink.game_state == DiscordLink.GameState.GameClient):
+	elif (DiscordLink.game_state != DiscordLink.GameState.GameHost):
+		$pause/align/top_bottom/top/invite.disabled = true
 		$pause/align/top_bottom/top/invite.disabled_text = "Unowned Lobby"
 
 

@@ -9,12 +9,18 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "RigidBody",
+"class": "Entity",
+"language": "GDScript",
+"path": "res://main/game/entity/entity.gd"
+}, {
 "base": "Entity",
 "class": "PlayerEntity",
 "language": "GDScript",
 "path": "res://main/game/entity/player.gd"
 } ]
 _global_script_class_icons={
+"Entity": "",
 "PlayerEntity": ""
 }
 
@@ -33,6 +39,7 @@ config/windows_native_icon="res://icon.png"
 
 [autoload]
 
+Logger="*res://main/global/logger.gd"
 DiscordLink="*res://main/global/discord_link.tscn"
 
 [debug]
@@ -55,7 +62,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/multirun/plugin.cfg" )
+enabled=PoolStringArray(  )
 
 [input]
 

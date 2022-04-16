@@ -37,8 +37,7 @@ func main_quit() -> void:
 # Play
 
 func play_open() -> void:
-	DiscordLink.next_game_state = DiscordLink.GameState.GameHost
-	get_tree().change_scene("res://main/game/world.tscn")
+	DiscordLink.set_game_state(DiscordLink.GameState.GameHost)
 
 
 #func play_join() -> void:

@@ -1,0 +1,198 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://main/game/interface/button.tscn" type="PackedScene" id=1]
+[ext_resource path="res://main/game/interface/user_button.gd" type="Script" id=2]
+[ext_resource path="res://assets/style/interface/user_button.tres" type="DynamicFont" id=3]
+[ext_resource path="res://assets/shader/interface/circle_mask.tres" type="Shader" id=4]
+[ext_resource path="res://assets/shader/interface/loading.tres" type="Shader" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0.1 )
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color( 0.2, 0.2, 0.2, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color( 0.2, 0.2, 0.2, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color( 0.2, 0.2, 0.2, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color( 0.2, 0.2, 0.2, 1 )
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="ShaderMaterial" id=7]
+resource_local_to_scene = true
+shader = ExtResource( 4 )
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = ExtResource( 5 )
+shader_param/angle = 0.0
+shader_param/ring_min = 0.25
+shader_param/ring_max = 0.5
+shader_param/threshold = 0.524
+
+[sub_resource type="Animation" id=9]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:material:shader_param/angle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "main"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:material:shader_param/angle")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -1.571, 1.571 ]
+}
+
+[sub_resource type="Animation" id=6]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "main"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.25 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[node name="user_button" instance=ExtResource( 1 )]
+margin_bottom = 1443.5
+rect_min_size = Vector2( 0, 130.5 )
+custom_fonts/font = ExtResource( 3 )
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/disabled = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
+disabled = true
+text = "Loading..."
+script = ExtResource( 2 )
+
+[node name="icon" type="ColorRect" parent="." index="0"]
+self_modulate = Color( 1, 1, 1, 0 )
+material = SubResource( 7 )
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 114.0
+margin_bottom = -16.0
+
+[node name="loading" type="ColorRect" parent="icon" index="0"]
+modulate = Color( 0.121569, 0.121569, 0.121569, 1 )
+material = SubResource( 8 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="loop" type="AnimationPlayer" parent="icon/loading" index="0"]
+autoplay = "main"
+anims/RESET = SubResource( 9 )
+anims/main = SubResource( 10 )
+
+[node name="discriminator" type="Label" parent="." index="1"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -32.0
+custom_fonts/font = ExtResource( 3 )
+align = 2
+valign = 1
+
+[node name="request" type="HTTPRequest" parent="." index="2"]
+
+[node name="complete" type="ColorRect" parent="." index="3"]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = -8.0
+mouse_filter = 2
+color = Color( 0, 1, 0, 0.247059 )
+
+[node name="text" type="Label" parent="complete" index="0"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 1, 0, 1 )
+custom_fonts/font = ExtResource( 3 )
+text = "Message"
+align = 1
+valign = 1
+
+[node name="toggle" type="AnimationPlayer" parent="complete" index="1"]
+anims/RESET = SubResource( 6 )
+anims/main = SubResource( 5 )
+
+[connection signal="pressed" from="." to="." method="pressed"]
+[connection signal="request_completed" from="request" to="." method="image_downloaded"]

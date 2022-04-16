@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://assets/shader/interface/split.tres" type="Shader" id=1]
 [ext_resource path="res://assets/model/feature/foliage/mushroom.tscn" type="PackedScene" id=2]
@@ -6,6 +6,13 @@
 [ext_resource path="res://assets/font/oxanium/bold.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://main/menu/main.gd" type="Script" id=5]
 [ext_resource path="res://assets/model/feature/stone/gem/gem.tres" type="Material" id=6]
+[ext_resource path="res://main/game/interface/button.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/texture/interface/icon/play.png" type="Texture" id=8]
+[ext_resource path="res://assets/texture/interface/icon/settings.png" type="Texture" id=9]
+[ext_resource path="res://assets/texture/interface/icon/quit.png" type="Texture" id=10]
+[ext_resource path="res://assets/texture/interface/icon/list.png" type="Texture" id=11]
+[ext_resource path="res://assets/texture/interface/icon/friends.png" type="Texture" id=12]
+[ext_resource path="res://assets/texture/interface/icon/left.png" type="Texture" id=13]
 
 [sub_resource type="PlaneMesh" id=2]
 size = Vector2( 100, 100 )
@@ -116,67 +123,15 @@ shader = ExtResource( 1 )
 shader_param/angle = 0.1
 shader_param/offset = 0.65
 shader_param/border_width = 0.01
-shader_param/background = Color( 0.05, 0.05, 0.05, 1 )
-shader_param/border = Color( 0.1, 0.1, 0.1, 1 )
+shader_param/background = Color( 0.0509804, 0.0509804, 0.0509804, 1 )
+shader_param/border = Color( 0.101961, 0.101961, 0.101961, 1 )
 shader_param/flip = true
 
-[sub_resource type="DynamicFont" id=3]
-size = 64
-extra_spacing_top = 8
-extra_spacing_bottom = 8
+[sub_resource type="DynamicFont" id=29]
+size = 144
 font_data = ExtResource( 4 )
 
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 0.6, 0.6, 0.6, 0.1 )
-border_width_left = 15
-border_width_top = 15
-border_width_right = 15
-border_width_bottom = 15
-border_color = Color( 0.2, 0.2, 0.2, 1 )
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-
-[sub_resource type="StyleBoxFlat" id=6]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
-border_width_left = 15
-border_width_top = 15
-border_width_right = 15
-border_width_bottom = 15
-border_color = Color( 0.2, 0.2, 0.2, 1 )
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-
-[sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="StyleBoxFlat" id=8]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
-border_width_left = 15
-border_width_top = 15
-border_width_right = 15
-border_width_bottom = 15
-border_color = Color( 0.2, 0.2, 0.2, 1 )
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
-border_width_left = 15
-border_width_top = 15
-border_width_right = 15
-border_width_bottom = 15
-border_color = Color( 0.2, 0.2, 0.2, 1 )
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=26]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:anchor_left")
@@ -200,12 +155,12 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 1.0 ]
+"values": [ 0.345 ]
 }
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=25]
 resource_name = "main"
-length = 0.15
+length = 0.1
 step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:anchor_left")
@@ -214,10 +169,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.15 ),
+"times": PoolRealArray( 0, 0.1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ -1.2, 0.0 ]
+"values": [ -0.395, 0.0 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath(".:anchor_right")
@@ -226,16 +181,20 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.15 ),
+"times": PoolRealArray( 0, 0.1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ -0.2, 1.0 ]
+"values": [ -0.05, 0.345 ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="DynamicFont" id=30]
+size = 80
+font_data = ExtResource( 4 )
+
+[sub_resource type="Animation" id=27]
 length = 0.001
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../play/vertical:anchor_left")
+tracks/0/path = NodePath(".:anchor_left")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -244,10 +203,10 @@ tracks/0/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ -1.2 ]
+"values": [ -0.395 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../play/vertical:anchor_right")
+tracks/1/path = NodePath(".:anchor_right")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -256,36 +215,92 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ -0.2 ]
+"values": [ -0.05 ]
 }
 
-[sub_resource type="Animation" id=16]
+[sub_resource type="Animation" id=28]
 resource_name = "main"
-length = 0.15
+length = 0.1
 step = 0.05
 tracks/0/type = "value"
-tracks/0/path = NodePath("../../play/vertical:anchor_left")
+tracks/0/path = NodePath(".:anchor_left")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.15 ),
+"times": PoolRealArray( 0, 0.1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ -1.2, 0.0 ]
+"values": [ -0.395, 0.0 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../../play/vertical:anchor_right")
+tracks/1/path = NodePath(".:anchor_right")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.15 ),
+"times": PoolRealArray( 0, 0.1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ -0.2, 1.0 ]
+"values": [ -0.05, 0.345 ]
+}
+
+[sub_resource type="Animation" id=31]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:anchor_left")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -0.395 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:anchor_right")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -0.05 ]
+}
+
+[sub_resource type="Animation" id=32]
+resource_name = "main"
+length = 0.1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:anchor_left")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -0.395, 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:anchor_right")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ -0.05, 0.345 ]
 }
 
 [sub_resource type="StyleBoxFlat" id=20]
@@ -420,7 +435,7 @@ anchor_bottom = 1.0
 stretch = true
 
 [node name="viewport" type="Viewport" parent="background"]
-size = Vector2( 2012, 1800 )
+size = Vector2( 2682, 2400 )
 handle_input_locally = false
 msaa = 3
 fxaa = true
@@ -486,10 +501,21 @@ material = SubResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
+[node name="title" type="Label" parent="menu"]
+visible = false
+anchor_right = 1.0
+margin_left = 128.0
+margin_top = 128.0
+margin_right = 86.7603
+margin_bottom = 244.0
+custom_fonts/font = SubResource( 29 )
+text = "ABYSSHEART"
+valign = 1
+
 [node name="main" type="Control" parent="menu"]
-anchor_left = 0.05
 anchor_right = 0.345
 anchor_bottom = 0.95
+margin_left = 128.0
 mouse_filter = 2
 
 [node name="vertical" type="VBoxContainer" parent="menu/main"]
@@ -498,106 +524,133 @@ anchor_bottom = 1.0
 custom_constants/separation = 32
 alignment = 2
 
-[node name="play" type="Button" parent="menu/main/vertical"]
-margin_top = 1313.0
-margin_right = 906.0
-margin_bottom = 1424.0
-custom_fonts/font = SubResource( 3 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 4 )
+[node name="play" parent="menu/main/vertical" instance=ExtResource( 7 )]
+margin_top = 1883.0
+margin_right = 1285.0
+margin_bottom = 1994.0
 text = "Play"
+icon = ExtResource( 8 )
 
-[node name="options" type="Button" parent="menu/main/vertical"]
-margin_top = 1456.0
-margin_right = 906.0
-margin_bottom = 1567.0
-custom_fonts/font = SubResource( 3 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 4 )
+[node name="options" parent="menu/main/vertical" instance=ExtResource( 7 )]
+margin_top = 2026.0
+margin_right = 1285.0
+margin_bottom = 2137.0
 text = "Options"
+icon = ExtResource( 9 )
 
-[node name="quit" type="Button" parent="menu/main/vertical"]
-margin_top = 1599.0
-margin_right = 906.0
-margin_bottom = 1710.0
-custom_fonts/font = SubResource( 3 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 4 )
+[node name="quit" parent="menu/main/vertical" instance=ExtResource( 7 )]
+margin_top = 2169.0
+margin_right = 1285.0
+margin_bottom = 2280.0
 text = "Quit"
+icon = ExtResource( 10 )
 
 [node name="toggle" type="AnimationPlayer" parent="menu/main"]
-root_node = NodePath("../vertical")
-anims/RESET = SubResource( 14 )
-anims/main = SubResource( 13 )
+anims/RESET = SubResource( 26 )
+anims/main = SubResource( 25 )
 
 [node name="play" type="Control" parent="menu"]
-anchor_left = 0.05
-anchor_right = 0.345
+anchor_left = -0.395
+anchor_right = -0.05
 anchor_bottom = 0.95
+margin_left = 128.0
 mouse_filter = 2
 
+[node name="title" type="Label" parent="menu/play"]
+anchor_right = 1.0
+margin_top = 256.0
+margin_right = -66.84
+margin_bottom = 244.0
+custom_fonts/font = SubResource( 30 )
+text = "PLAY"
+
 [node name="vertical" type="VBoxContainer" parent="menu/play"]
-anchor_left = -1.2
-anchor_right = -0.2
+anchor_right = 1.0
 anchor_bottom = 1.0
 custom_constants/separation = 32
 alignment = 2
 
-[node name="open_world" type="Button" parent="menu/play/vertical"]
-margin_top = 1217.0
-margin_right = 906.0
-margin_bottom = 1328.0
-custom_fonts/font = SubResource( 3 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 4 )
+[node name="open" parent="menu/play/vertical" instance=ExtResource( 7 )]
+margin_top = 1930.0
+margin_right = 1285.0
+margin_bottom = 2041.0
 text = "Open World"
+icon = ExtResource( 11 )
 
-[node name="join_world" type="Button" parent="menu/play/vertical"]
-margin_top = 1360.0
-margin_right = 906.0
-margin_bottom = 1471.0
-custom_fonts/font = SubResource( 3 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 4 )
-text = "Join World"
+[node name="join" parent="menu/play/vertical" instance=ExtResource( 7 )]
+visible = false
+margin_top = 1930.0
+margin_right = 1285.0
+margin_bottom = 2041.0
+text = "Join Friend"
+icon = ExtResource( 12 )
 
 [node name="spacer" type="Control" parent="menu/play/vertical"]
-margin_top = 1503.0
-margin_right = 906.0
-margin_bottom = 1567.0
+margin_top = 2073.0
+margin_right = 1285.0
+margin_bottom = 2137.0
 rect_min_size = Vector2( 0, 64 )
 
-[node name="back" type="Button" parent="menu/play/vertical"]
-margin_top = 1599.0
-margin_right = 906.0
-margin_bottom = 1710.0
-custom_fonts/font = SubResource( 3 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 4 )
+[node name="back" parent="menu/play/vertical" instance=ExtResource( 7 )]
+margin_top = 2169.0
+margin_right = 1285.0
+margin_bottom = 2280.0
 text = "Back"
+icon = ExtResource( 13 )
 
 [node name="toggle" type="AnimationPlayer" parent="menu/play"]
-root_node = NodePath("../../main/vertical")
-anims/RESET = SubResource( 15 )
-anims/main = SubResource( 16 )
+anims/RESET = SubResource( 27 )
+anims/main = SubResource( 28 )
+
+[node name="join" type="Control" parent="menu"]
+visible = false
+anchor_left = -0.395
+anchor_right = -0.05
+anchor_bottom = 0.95
+margin_left = 128.0
+mouse_filter = 2
+
+[node name="title" type="Label" parent="menu/join"]
+anchor_right = 1.0
+margin_top = 256.0
+margin_right = -66.84
+margin_bottom = 244.0
+custom_fonts/font = SubResource( 30 )
+text = "JOIN"
+
+[node name="top_bottom" type="VBoxContainer" parent="menu/join"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 384.0
+custom_constants/separation = 32
+alignment = 2
+
+[node name="top" type="ScrollContainer" parent="menu/join/top_bottom"]
+margin_right = 1285.0
+margin_bottom = 1657.0
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
+
+[node name="vertical" type="VBoxContainer" parent="menu/join/top_bottom/top"]
+margin_right = 1285.0
+size_flags_horizontal = 3
+
+[node name="spacer" type="Control" parent="menu/join/top_bottom"]
+margin_top = 1689.0
+margin_right = 1285.0
+margin_bottom = 1753.0
+rect_min_size = Vector2( 0, 64 )
+
+[node name="back" parent="menu/join/top_bottom" instance=ExtResource( 7 )]
+margin_top = 1785.0
+margin_right = 1285.0
+margin_bottom = 1896.0
+text = "Back"
+icon = ExtResource( 13 )
+
+[node name="toggle" type="AnimationPlayer" parent="menu/join"]
+anims/RESET = SubResource( 31 )
+anims/main = SubResource( 32 )
 
 [node name="quit" type="ColorRect" parent="menu"]
 visible = false
@@ -625,39 +678,37 @@ text = "Quit?"
 align = 1
 valign = 2
 
-[node name="cancel" type="Button" parent="menu/quit/background"]
+[node name="cancel" parent="menu/quit/background" instance=ExtResource( 7 )]
 anchor_left = 0.125
 anchor_top = 0.625
 anchor_right = 0.45
 anchor_bottom = 0.625
-custom_fonts/font = SubResource( 3 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 4 )
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 111.0
 text = "Cancel"
+icon = ExtResource( 13 )
 
-[node name="quit" type="Button" parent="menu/quit/background"]
+[node name="quit" parent="menu/quit/background" instance=ExtResource( 7 )]
 anchor_left = 0.55
 anchor_top = 0.625
 anchor_right = 0.875
 anchor_bottom = 0.625
-custom_fonts/font = SubResource( 3 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 7 )
-custom_styles/disabled = SubResource( 8 )
-custom_styles/normal = SubResource( 4 )
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 111.0
 text = "Quit"
+icon = ExtResource( 10 )
 
 [node name="toggle" type="AnimationPlayer" parent="menu/quit"]
 anims/RESET = SubResource( 22 )
 anims/main = SubResource( 23 )
 
 [connection signal="pressed" from="menu/main/vertical/play" to="." method="main_play"]
+[connection signal="pressed" from="menu/main/vertical/options" to="." method="main_options"]
 [connection signal="pressed" from="menu/main/vertical/quit" to="." method="main_quit"]
-[connection signal="pressed" from="menu/play/vertical/open_world" to="." method="play_openworld"]
+[connection signal="pressed" from="menu/play/vertical/open" to="." method="play_open"]
+[connection signal="pressed" from="menu/play/vertical/join" to="." method="play_join"]
 [connection signal="pressed" from="menu/play/vertical/back" to="." method="play_back"]
 [connection signal="pressed" from="menu/quit/background/cancel" to="." method="quit_cancel"]
 [connection signal="pressed" from="menu/quit/background/quit" to="." method="quit_quit"]

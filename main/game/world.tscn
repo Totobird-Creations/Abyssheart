@@ -1,14 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://main/game/world.gd" type="Script" id=1]
-[ext_resource path="res://main/game/multiplayer/server.tscn" type="PackedScene" id=2]
-[ext_resource path="res://main/game/multiplayer/hoster.tscn" type="PackedScene" id=3]
+[ext_resource path="res://main/game/interface/interface.tscn" type="PackedScene" id=4]
 
 [sub_resource type="CubeMesh" id=1]
-size = Vector3( 10, 1, 10 )
+size = Vector3( 50, 1, 50 )
 
 [sub_resource type="BoxShape" id=2]
-extents = Vector3( 5, 0.5, 5 )
+extents = Vector3( 25, 0.5, 25 )
 
 [node name="world" type="Spatial"]
 script = ExtResource( 1 )
@@ -26,16 +25,13 @@ material/0 = null
 [node name="shape" type="CollisionShape" parent="generation/floor"]
 shape = SubResource( 2 )
 
-[node name="light" type="DirectionalLight" parent="generation"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
-
 [node name="entities" type="Spatial" parent="."]
 
-[node name="Camera" type="Camera" parent="entities"]
-transform = Transform( 1, 0, 0, 0, 0.933236, 0.359264, 0, -0.359264, 0.933236, 0, 2.1241, 1.73169 )
+[node name="environment" type="Spatial" parent="."]
+
+[node name="light" type="DirectionalLight" parent="environment"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
 
 [node name="multiplayer" type="Node" parent="."]
 
-[node name="server" parent="multiplayer" instance=ExtResource( 2 )]
-
-[node name="hoster" parent="multiplayer" instance=ExtResource( 3 )]
+[node name="interface" parent="." instance=ExtResource( 4 )]

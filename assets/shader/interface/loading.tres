@@ -1,0 +1,31 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+
+
+
+uniform float angle     = 0.0;
+uniform float ring_min  = 0.25;
+uniform float ring_max  = 0.5;
+uniform float threshold = 0.3925;
+
+
+
+void fragment() {
+	vec2 delta = vec2(0.5 - UV.x, UV.y - 0.5);
+	if (
+		distance(UV, vec2(0.5)) > ring_min &&
+		distance(UV, vec2(0.5)) < ring_max &&
+		(
+			abs(atan(delta.x, delta.y) - angle) > threshold &&
+			abs(atan(delta.x, delta.y) - angle - 3.14) > threshold &&
+			abs(atan(delta.x, delta.y) - angle + 3.14) > threshold
+		)
+	) {
+		COLOR = vec4(1.0);
+	} else {
+		COLOR = vec4(0.0);
+	}
+}
+"

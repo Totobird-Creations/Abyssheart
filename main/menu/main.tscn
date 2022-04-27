@@ -1,11 +1,11 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://assets/shader/interface/split.tres" type="Shader" id=1]
-[ext_resource path="res://assets/model/feature/foliage/mushroom.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/model/feature/foliage/spore.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/model/feature/foliage/mushroom/mushroom.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/model/feature/foliage/mushroom/spore.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/font/oxanium/bold.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://main/menu/main.gd" type="Script" id=5]
-[ext_resource path="res://assets/model/feature/stone/gem/gem.tres" type="Material" id=6]
+[ext_resource path="res://assets/shader/spatial/environment/hole.tres" type="Material" id=6]
 [ext_resource path="res://main/game/interface/button.tscn" type="PackedScene" id=7]
 [ext_resource path="res://assets/texture/interface/icon/play.png" type="Texture" id=8]
 [ext_resource path="res://assets/texture/interface/icon/settings.png" type="Texture" id=9]
@@ -13,9 +13,46 @@
 [ext_resource path="res://assets/texture/interface/icon/list.png" type="Texture" id=11]
 [ext_resource path="res://assets/texture/interface/icon/friends.png" type="Texture" id=12]
 [ext_resource path="res://assets/texture/interface/icon/left.png" type="Texture" id=13]
+[ext_resource path="res://assets/shader/spatial/environment/godrays.tres" type="Material" id=14]
+[ext_resource path="res://main/game/entity/player.tscn" type="PackedScene" id=15]
 
 [sub_resource type="PlaneMesh" id=2]
 size = Vector2( 100, 100 )
+
+[sub_resource type="CylinderMesh" id=33]
+top_radius = 0.75
+bottom_radius = 2.125
+height = 10.0
+
+[sub_resource type="CylinderMesh" id=34]
+top_radius = 0.7
+bottom_radius = 0.75
+height = 0.001
+
+[sub_resource type="Curve" id=38]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.501916, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=39]
+curve = SubResource( 38 )
+
+[sub_resource type="ParticlesMaterial" id=35]
+emission_shape = 2
+emission_box_extents = Vector3( 0.5, 3, 0.5 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 0.1
+scale_curve = SubResource( 39 )
+
+[sub_resource type="SpatialMaterial" id=37]
+flags_unshaded = true
+albedo_color = Color( 2, 1.88, 1.5, 1 )
+
+[sub_resource type="SphereMesh" id=36]
+material = SubResource( 37 )
+radius = 0.025
+height = 0.05
+radial_segments = 4
+rings = 1
 
 [sub_resource type="Animation" id=17]
 length = 0.001
@@ -81,42 +118,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Vector3( 0, -0.15, 0 ), Vector3( 0, 0, 0 ), Vector3( 0, 0.15, 0 ), Vector3( 0, 0, 0 ) ]
 }
-
-[sub_resource type="Animation" id=9]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ) ]
-}
-
-[sub_resource type="Animation" id=10]
-resource_name = "main"
-length = 50.0
-loop = true
-step = 1.0
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:rotation_degrees")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 50 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ) ]
-}
-
-[sub_resource type="CubeMesh" id=19]
-size = Vector3( 0.5, 2, 0.5 )
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
@@ -448,16 +449,57 @@ gui_disable_input = true
 mesh = SubResource( 2 )
 material/0 = null
 
-[node name="mushroom" parent="background/viewport/background" instance=ExtResource( 2 )]
+[node name="main" type="Spatial" parent="background/viewport/background"]
 
-[node name="spore0" parent="background/viewport/background" instance=ExtResource( 3 )]
+[node name="mushroom" parent="background/viewport/background/main" instance=ExtResource( 2 )]
+
+[node name="spore0" parent="background/viewport/background/main" instance=ExtResource( 3 )]
 transform = Transform( 0.833156, -0.551827, 0.0365719, 0.546317, 0.810953, -0.209504, 0.0859519, 0.19453, 0.977124, -0.903729, -0.0178919, 0.389843 )
 
-[node name="spore1" parent="background/viewport/background" instance=ExtResource( 3 )]
+[node name="spore1" parent="background/viewport/background/main" instance=ExtResource( 3 )]
 transform = Transform( 0.961003, -0.274927, -0.0298004, 0.262841, 0.94158, -0.210574, 0.0859519, 0.19453, 0.977124, -0.670059, -0.0507007, 1.17648 )
 
-[node name="spore2" parent="background/viewport/background" instance=ExtResource( 3 )]
+[node name="spore2" parent="background/viewport/background/main" instance=ExtResource( 3 )]
 transform = Transform( 0.961003, -0.274927, -0.0298004, 0.248652, 0.811909, 0.528182, -0.121016, -0.514994, 0.848608, -1.49444, -0.0616019, 1.22078 )
+
+[node name="play" type="Spatial" parent="background/viewport/background"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 1, 15 )
+
+[node name="character" parent="background/viewport/background/play" instance=ExtResource( 15 )]
+transform = Transform( 0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -0.375, -1, 0 )
+script = null
+
+[node name="hole" type="Spatial" parent="background/viewport/background/play"]
+transform = Transform( 0.990268, -0.139173, 0, 0.137819, 0.980631, -0.139173, 0.0193692, 0.137819, 0.990268, 0, -1, 0 )
+
+[node name="light" type="SpotLight" parent="background/viewport/background/play/hole"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 11, 0 )
+light_color = Color( 1, 0.937255, 0.74902, 1 )
+shadow_enabled = true
+spot_range = 15.0
+spot_angle = 8.0
+spot_angle_attenuation = 0.5
+
+[node name="godrays" type="MeshInstance" parent="background/viewport/background/play/hole"]
+transform = Transform( 1, -1.25729e-08, 0, -1.30385e-08, 1, 0, 0, 0, 1, -9.53674e-07, 1, 1.90735e-06 )
+mesh = SubResource( 33 )
+skeleton = NodePath("../..")
+material/0 = ExtResource( 14 )
+
+[node name="hole" type="MeshInstance" parent="background/viewport/background/play/hole"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 0 )
+cast_shadow = 0
+mesh = SubResource( 34 )
+skeleton = NodePath("../..")
+material/0 = ExtResource( 6 )
+
+[node name="particles" type="Particles" parent="background/viewport/background/play/hole"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
+cast_shadow = 0
+amount = 16
+lifetime = 3.0
+process_material = SubResource( 35 )
+draw_pass_1 = SubResource( 36 )
 
 [node name="camera_pivot" type="Spatial" parent="background/viewport/background"]
 
@@ -481,20 +523,10 @@ autoplay = "main"
 anims/RESET = SubResource( 12 )
 anims/main = SubResource( 11 )
 
-[node name="loop" type="AnimationPlayer" parent="background/viewport/background/camera_pivot"]
-autoplay = "main"
-anims/RESET = SubResource( 9 )
-anims/main = SubResource( 10 )
-
-[node name="play_background" type="Spatial" parent="background/viewport/background/camera_pivot"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, 15 )
-
-[node name="gem" type="MeshInstance" parent="background/viewport/background/camera_pivot/play_background"]
-mesh = SubResource( 19 )
-material/0 = ExtResource( 6 )
-
-[node name="light" type="OmniLight" parent="background/viewport/background/camera_pivot/play_background/gem"]
-light_color = Color( 0.513726, 1, 0.25098, 1 )
+[node name="debug" type="DirectionalLight" parent="background/viewport"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+light_energy = 0.1
+editor_only = true
 
 [node name="menu" type="ColorRect" parent="."]
 material = SubResource( 1 )
@@ -502,14 +534,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="title" type="Label" parent="menu"]
-visible = false
 anchor_right = 1.0
 margin_left = 128.0
 margin_top = 128.0
 margin_right = 86.7603
 margin_bottom = 244.0
 custom_fonts/font = SubResource( 29 )
-text = "ABYSSHEART"
+text = "TITLE"
 valign = 1
 
 [node name="main" type="Control" parent="menu"]

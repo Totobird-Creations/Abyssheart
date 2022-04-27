@@ -4,8 +4,6 @@ extends Control
 
 const USER_BUTTON           : PackedScene = preload("res://main/game/interface/user_button.tscn")
 
-var   camera_pivot_position : float       = 0.0
-
 var   thread                : Thread
 
 
@@ -21,8 +19,6 @@ func _ready() -> void:
 func main_play() -> void:
 	$menu/main/toggle.play_backwards("main")
 	$menu/play/toggle.play("main")
-	camera_pivot_position = $background/viewport/background/camera_pivot/loop.current_animation_position
-	$background/viewport/background/camera_pivot/loop.stop()
 	$background/viewport/background/camera_pivot/camera_vertical_offset/camera_distance_offset/transition.play("main_to_play")
 
 
@@ -90,8 +86,6 @@ func play_open() -> void:
 func play_back() -> void:
 	$menu/play/toggle.play_backwards("main")
 	$menu/main/toggle.play("main")
-	$background/viewport/background/camera_pivot/loop.play("main")
-	$background/viewport/background/camera_pivot/loop.seek(camera_pivot_position)
 	$background/viewport/background/camera_pivot/camera_vertical_offset/camera_distance_offset/transition.play_backwards("main_to_play")
 
 

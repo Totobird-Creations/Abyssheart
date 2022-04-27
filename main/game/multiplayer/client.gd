@@ -16,4 +16,4 @@ func connection_failure() -> void:
 
 func _exit_tree() -> void:
 	DiscordLink.network_peer.close_connection()
-	get_tree().network_peer = null
+	get_tree().set_network_peer(null)

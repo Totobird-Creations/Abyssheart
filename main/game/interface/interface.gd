@@ -2,13 +2,46 @@ extends CanvasLayer
 
 
 
+enum MouseMode {
+	Game,
+	Pause,
+	Invite
+}
+
 const USER_BUTTON : PackedScene = preload("res://main/game/interface/user_button.tscn")
 
+var   mouse_mode  : int    = MouseMode.Game setget set_mouse_mode
 var   thread      : Thread
 
 
 
+
+
+func set_mouse_mode(value : int) -> void:
+	# Clean up previous state
+	match (mouse_mode):
+		MouseMode.Pause:
+			$pause/toggle.play_backwards("main")
+		MouseMode.Invite:
+			$invite/toggle.play_backwards("main")
+	# Set new state
+	mouse_mode = value
+	# Set up new state
+	match (mouse_mode):
+		MouseMode.Game:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		MouseMode.Pause:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			$pause/toggle.play("main")
+		MouseMode.Invite:
+			$invite/toggle.play("main")
+
+
+
+
+
 func _ready() -> void:
+	set_mouse_mode(MouseMode.Game)
 	$pause/align/top_bottom/top/invite.disabled = false
 	if (! DiscordLink.discord_active):
 		$pause/align/top_bottom/top/invite.disabled = true
@@ -18,14 +51,33 @@ func _ready() -> void:
 		$pause/align/top_bottom/top/invite.disabled_text = "Unowned Lobby"
 
 
+func _process(_delta : float) -> void:
+	if (Input.is_action_just_pressed("interface_back")):
+		match (mouse_mode):
+			MouseMode.Game:
+				set_mouse_mode(MouseMode.Pause)
+			MouseMode.Pause:
+				set_mouse_mode(MouseMode.Game)
+			MouseMode.Invite:
+				set_mouse_mode(MouseMode.Pause)
+
+
+func _exit_tree() -> void:
+	if (thread):
+		thread.wait_to_finish()
+
+
+
+
 
 # Pause.
 
 func pause_back() -> void:
-	$pause/toggle.play_backwards("main")
+	set_mouse_mode(MouseMode.Game)
 
 
 func pause_invite() -> void:
+	set_mouse_mode(MouseMode.Invite)
 	# Clear friends.
 	for child in $invite/align/top_bottom/top/vertical.get_children():
 		child.queue_free()
@@ -37,9 +89,6 @@ func pause_invite() -> void:
 		instance.mode     = instance.Mode.Invite
 		instance.user_id  = relationship.user_id
 		$invite/align/top_bottom/top/vertical.add_child(instance)
-	# Play animations.
-	$pause/toggle.play_backwards("main")
-	$invite/toggle.play("main")
 	# Thread data
 	if (thread):
 		thread.wait_to_finish()
@@ -72,13 +121,4 @@ func invite_user(user_id : int) -> void:
 
 
 func invite_cancel() -> void:
-	$invite/toggle.play_backwards("main")
-	$pause/toggle.play("main")
-
-
-
-
-
-func _exit_tree() -> void:
-	if (thread):
-		thread.wait_to_finish()
+	set_mouse_mode(MouseMode.Pause)

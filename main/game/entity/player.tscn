@@ -2,51 +2,39 @@
 
 [ext_resource path="res://main/game/entity/player.gd" type="Script" id=2]
 
-[sub_resource type="CapsuleMesh" id=1]
-radius = 0.5
-mid_height = 1.5
+[sub_resource type="CapsuleMesh" id=3]
+radius = 0.25
+mid_height = 1.24
 
 [sub_resource type="CapsuleShape" id=2]
-radius = 0.5
-height = 1.5
+radius = 0.25
+height = 1.1
 
-[node name="player" type="KinematicBody"]
-collision_layer = 4
-collision_mask = 3
+[node name="player" type="Spatial"]
 script = ExtResource( 2 )
 
-[node name="mesh_pivot" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.25, 0 )
+[node name="body" type="KinematicBody" parent="."]
+collision_layer = 4
+collision_mask = 3
 
-[node name="mesh" type="MeshInstance" parent="mesh_pivot"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.25, 0 )
-mesh = SubResource( 1 )
-skeleton = NodePath("../..")
+[node name="mesh_pivot" type="Spatial" parent="body"]
+
+[node name="mesh" type="MeshInstance" parent="body/mesh_pivot"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0 )
+mesh = SubResource( 3 )
 material/0 = null
 
-[node name="body" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+[node name="body" type="CollisionShape" parent="body"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, 0 )
 shape = SubResource( 2 )
 
-[node name="pivot" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0 )
+[node name="pivot" type="Spatial" parent="body"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.675, 0 )
 
-[node name="camera" type="Spatial" parent="pivot"]
+[node name="camera" type="Spatial" parent="body/pivot"]
 
-[node name="viewer" type="VoxelViewer" parent="pivot/camera"]
+[node name="viewer" type="VoxelViewer" parent="body/pivot/camera"]
 
-[node name="camera" type="Camera" parent="pivot/camera"]
-far = 1000.0
-
-[node name="cast" type="RayCast" parent="pivot/camera/camera"]
-enabled = true
-cast_to = Vector3( 0, 0, -5 )
-collision_mask = 15
-
-[node name="hands" type="Spatial" parent="pivot"]
-
-[node name="left" type="Spatial" parent="pivot/hands"]
-transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.5, -0.25, -0.6 )
-
-[node name="right" type="Spatial" parent="pivot/hands"]
-transform = Transform( 0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.5, -0.25, -0.6 )
+[node name="camera" type="Camera" parent="body/pivot/camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10 )
+far = 1024.0

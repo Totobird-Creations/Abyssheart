@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/shader/post_process/glitch.tres" type="Material" id=1]
+
+[node name="post_processing" type="CanvasLayer"]
+layer = 10
+
+[node name="glitch" type="ColorRect" parent="."]
+visible = false
+material = ExtResource( 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2

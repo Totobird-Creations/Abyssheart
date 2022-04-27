@@ -222,7 +222,6 @@ text = "Exit To Menu"
 icon = ExtResource( 6 )
 
 [node name="toggle" type="AnimationPlayer" parent="pause"]
-autoplay = "main"
 anims/RESET = SubResource( 5 )
 anims/main = SubResource( 4 )
 

@@ -2,11 +2,7 @@ extends Node
 
 
 
-const APPLICATION_ID     : int        = 962773221130797126
-
-const ICON_RELOAD        : Texture    = preload("res://assets/texture/interface/icon/reload.png")
-
-var   discord_active     : bool       = false
+const PATH_PLAYER : String = "res://main/game/entity/player.tscn"
 
 enum NotificationType {
 	DiscordInactive,
@@ -14,12 +10,18 @@ enum NotificationType {
 	Invite,
 	Join
 }
-
 enum GameState {
 	Menu,
 	GameHost,
 	GameClient
 }
+
+const APPLICATION_ID     : int        = 962773221130797126
+const SERVER_ID          : int        = 1
+
+const ICON_RELOAD        : Texture    = preload("res://assets/texture/interface/icon/reload.png")
+
+var   discord_active     : bool       = false
 var game_state           : int                           = GameState.Menu setget set_game_state
 var start                : int                           = OS.get_unix_time()
 
@@ -56,10 +58,6 @@ func set_game_state(value : int, secret : String = "") -> void:
 				notification_queue = new_notification_queue
 				if (len(notification_current.keys()) >= 1 && notification_current.type == NotificationType.JoinRequest):
 					notification_decline()
-				# Clear network peer.
-				if (discord_active):
-					network_peer.close_connection()
-					get_tree().network_peer = null
 
 		# Set new state
 		game_state = value
@@ -74,13 +72,13 @@ func set_game_state(value : int, secret : String = "") -> void:
 				if (discord_active):
 					network_peer = NetworkedMultiplayerGodotcord.new()
 					network_peer.create_lobby(10, false)
-					get_tree().network_peer = network_peer
+					get_tree().set_network_peer(network_peer)
 				get_tree().change_scene("res://main/game/world.tscn")
 
 			GameState.GameClient:
 				network_peer = NetworkedMultiplayerGodotcord.new()
 				network_peer.join_server_activity(secret)
-				get_tree().network_peer = network_peer
+				get_tree().set_network_peer(network_peer)
 				get_tree().change_scene("res://main/game/world.tscn")
 
 	update_activity()
@@ -233,6 +231,7 @@ func join_request_received(user_name : String, user_id : int) -> void:
 			user_discriminator = user.discriminator
 		})
 
+
 # I clicked a join button in discord.
 func join_pressed_in_discord(activity_secret : String) -> void:
 	notification_queue.append({
@@ -255,6 +254,7 @@ func notification_accept() -> void:
 	$viewport/notification/progress/timer.stop()
 	$viewport/notification/timeout.stop()
 
+
 func notification_decline() -> void:
 	match (notification_current.type):
 		NotificationType.JoinRequest:
@@ -264,8 +264,10 @@ func notification_decline() -> void:
 	$viewport/notification/progress/timer.stop()
 	$viewport/notification/timeout.stop()
 
+
 func notification_reload() -> void:
 	get_tree().quit(0)
+
 
 func notification_dismiss() -> void:
 	notification_current = {}
@@ -282,3 +284,11 @@ func is_network_connected() -> bool:
 		get_tree().network_peer &&
 		get_tree().network_peer.get_connection_status() == get_tree().network_peer.CONNECTION_CONNECTED
 	)
+
+
+func is_sender_server() -> bool:
+	return (! is_network_connected() || get_tree().get_rpc_sender_id() in [SERVER_ID, 0])
+
+
+func is_server() -> bool:
+	return (! is_network_connected() || get_tree().is_network_server())

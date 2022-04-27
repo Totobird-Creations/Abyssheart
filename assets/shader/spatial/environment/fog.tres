@@ -1,0 +1,83 @@
+[gd_resource type="VisualShader" load_steps=7 format=2]
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=9]
+uniform_name = "Divisor"
+
+[sub_resource type="VisualShaderNodeFresnel" id=3]
+default_input_values = [ 2, true, 3, 3.0 ]
+
+[sub_resource type="VisualShaderNodeScalarOp" id=6]
+default_input_values = [ 0, 0.0, 1, 4.0 ]
+operator = 3
+
+[sub_resource type="VisualShaderNodeColorUniform" id=7]
+uniform_name = "Colour"
+
+[sub_resource type="VisualShaderNodeScalarOp" id=8]
+operator = 2
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=10]
+uniform_name = "Power"
+
+[resource]
+code = "shader_type spatial;
+render_mode specular_schlick_ggx, unshaded;
+
+uniform vec4 Colour : hint_color;
+uniform float Power;
+uniform float Divisor;
+
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// ColorUniform:7
+	vec3 n_out7p0 = Colour.rgb;
+	float n_out7p1 = Colour.a;
+
+// ScalarUniform:9
+	float n_out9p0 = Power;
+
+// Fresnel:3
+	float n_out3p0 = pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out9p0);
+
+// ScalarUniform:10
+	float n_out10p0 = Divisor;
+
+// ScalarOp:6
+	float n_out6p0 = n_out3p0 / n_out10p0;
+
+// ScalarOp:8
+	float n_out8p0 = n_out7p1 * n_out6p0;
+
+// Output:0
+	ALBEDO = n_out7p0;
+	ALPHA = n_out8p0;
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+graph_offset = Vector2( 0, 21 )
+flags/unshaded = true
+nodes/fragment/0/position = Vector2( 1160, 120 )
+nodes/fragment/3/node = SubResource( 3 )
+nodes/fragment/3/position = Vector2( 420, 260 )
+nodes/fragment/6/node = SubResource( 6 )
+nodes/fragment/6/position = Vector2( 740, 260 )
+nodes/fragment/7/node = SubResource( 7 )
+nodes/fragment/7/position = Vector2( 420, 100 )
+nodes/fragment/8/node = SubResource( 8 )
+nodes/fragment/8/position = Vector2( 940, 180 )
+nodes/fragment/9/node = SubResource( 10 )
+nodes/fragment/9/position = Vector2( 200, 260 )
+nodes/fragment/10/node = SubResource( 9 )
+nodes/fragment/10/position = Vector2( 420, 440 )
+nodes/fragment/connections = PoolIntArray( 3, 0, 6, 0, 7, 0, 0, 0, 6, 0, 8, 1, 7, 1, 8, 0, 8, 0, 0, 1, 9, 0, 3, 3, 10, 0, 6, 1 )

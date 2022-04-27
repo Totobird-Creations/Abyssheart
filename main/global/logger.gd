@@ -1,16 +1,28 @@
 extends Node
 
 
-# Declare member variables here. Examples:
-# var a: int = 2
-# var b: String = "text"
+
+const KEYS       : Dictionary = {
+	network = "NETWORK"
+}
+var   key_length : int
 
 
-# Called when the node enters the scene tree for the first time.
+
+
+
 func _ready() -> void:
-	pass # Replace with function body.
+	for value in KEYS.values():
+		if (len(value) > key_length):
+			key_length = len(value)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta: float) -> void:
-#	pass
+
+
+
+func network(message : String) -> void:
+	message(KEYS.network, message)
+
+
+func message(key : String, message : String) -> void:
+	print("[ " + key.pad_zeros(key_length).replace("0", " ") + " ] " + message)

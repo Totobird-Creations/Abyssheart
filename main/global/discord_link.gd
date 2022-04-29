@@ -29,7 +29,8 @@ const SERVER_ID          : int        = 1
 
 const ICON_RELOAD        : Texture    = preload("res://assets/texture/interface/icon/reload.png")
 
-var   discord_active     : bool       = false
+var discord_active       : bool       = false
+var has_started          : bool       = false
 var game_state           : int                           = GameState.Menu setget set_game_state
 var start                : int                           = OS.get_unix_time()
 
@@ -74,20 +75,20 @@ func set_game_state(value : int, secret : String = "") -> void:
 		match (game_state):
 
 			GameState.Menu:
-				get_tree().change_scene("res://main/menu/main.tscn")
+				SceneSwitcher.switch_scene("res://main/menu/main.tscn")
 
 			GameState.GameHost:
 				if (discord_active):
 					network_peer = S_NetworkedMultiplayerGodotcord.new()
 					network_peer.create_lobby(10, false)
 					get_tree().set_network_peer(network_peer)
-				get_tree().change_scene("res://main/game/world.tscn")
+				SceneSwitcher.switch_scene("res://main/game/world.tscn")
 
 			GameState.GameClient:
 				network_peer = S_NetworkedMultiplayerGodotcord.new()
 				network_peer.join_server_activity(secret)
 				get_tree().set_network_peer(network_peer)
-				get_tree().change_scene("res://main/game/world.tscn")
+				SceneSwitcher.switch_scene("res://main/game/world.tscn")
 
 	update_activity()
 
@@ -95,7 +96,8 @@ func set_game_state(value : int, secret : String = "") -> void:
 
 
 
-func _ready() -> void:
+func start() -> void:
+	has_started = true
 	var error := -1
 	if (Engine.has_singleton("Godotcord")):
 		S_Godotcord                     = Engine.get_singleton("Godotcord")
@@ -122,6 +124,9 @@ func _ready() -> void:
 
 
 func _process(delta : float) -> void:
+	if (! has_started):
+		return
+
 	if (discord_active):
 		S_Godotcord.run_callbacks()
 
@@ -133,7 +138,7 @@ func _process(delta : float) -> void:
 		$viewport/notification/timeout.start()
 		match (notification_current.type):
 			NotificationType.DiscordInactive:
-				$viewport/notification/message.text           = "Failed to connect to Discord. Multiplayer is disabled."
+				$viewport/notification/message.text           = "Discord not detected. Multiplayer is disabled."
 				$viewport/notification/icon.material.set_shader_param("icon", ICON_RELOAD)
 				$viewport/notification/accept_decline.visible = false
 				$viewport/notification/reload.visible         = true
@@ -306,8 +311,12 @@ func is_network_connected() -> bool:
 
 
 func is_sender_server() -> bool:
-	return (! is_network_connected() || get_tree().get_rpc_sender_id() in [SERVER_ID, 0])
+	return (! is_network_connected()) || get_tree().get_rpc_sender_id() in [SERVER_ID, 0]
 
 
 func is_server() -> bool:
-	return (! is_network_connected() || get_tree().is_network_server())
+	return (! is_network_connected()) || get_tree().is_network_server()
+
+
+func is_host() -> bool:
+	return game_state == GameState.GameHost && discord_active

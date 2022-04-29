@@ -33,7 +33,7 @@ func created_lobby() -> void:
 
 
 func client_connected(peer_id : int) -> void:
-	if (DiscordLink.is_server()):
+	if (DiscordLink.is_host()):
 		var user_id : int = DiscordLink.network_peer.get_user_id_by_peer(peer_id)
 		DiscordLink.S_GodotcordUserManager.get_user(user_id)
 		var user = yield(DiscordLink.S_GodotcordUserManager, "get_user_callback")

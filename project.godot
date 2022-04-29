@@ -40,6 +40,7 @@ config/icon="res://icon.png"
 Logger="*res://main/global/logger.gd"
 PostProcessing="*res://main/global/post_processing.tscn"
 DiscordLink="*res://main/global/discord_link.tscn"
+SceneSwitcher="*res://main/global/scene_switcher.tscn"
 
 [debug]
 

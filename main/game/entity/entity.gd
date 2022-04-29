@@ -161,5 +161,7 @@ func _physics_process(delta : float) -> void:
 	# Reset impulse inputs
 	input_jump = false
 
-	if (DiscordLink.is_server()):
+	if (DiscordLink.is_host()):
 		get_game_world().rpc("r_update_entity", id, generate_data())
+	else:
+		get_game_world().r_update_entity(id, generate_data())

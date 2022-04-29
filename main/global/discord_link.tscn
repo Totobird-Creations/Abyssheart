@@ -69,7 +69,7 @@ tracks/1/keys = {
 }
 
 [node name="discord_link" type="CanvasLayer"]
-layer = 9
+layer = 8
 script = ExtResource( 1 )
 
 [node name="viewport" type="Control" parent="."]

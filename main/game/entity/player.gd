@@ -40,7 +40,7 @@ func get_game_world() -> Spatial:
 func load_data(data : Dictionary) -> void:
 	.load_data(data)
 	peer_id     = data.get("peer_id", peer_id)
-	controlling = peer_id == get_tree().get_network_unique_id()
+	controlling = (! DiscordLink.is_host()) || peer_id == get_tree().get_network_unique_id()
 	if (controlling):
 		$body/pivot/camera/camera.make_current()
 	else:

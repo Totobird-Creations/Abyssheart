@@ -82,8 +82,8 @@ func pause_invite() -> void:
 	for child in $invite/align/top_bottom/top/vertical.get_children():
 		child.queue_free()
 	# Get friends.
-	GodotcordRelationshipManager.filter_relationships(self, "_relationship_filter")
-	var relationships := GodotcordRelationshipManager.get_relationships()
+	DiscordLink.S_GodotcordRelationshipManager.filter_relationships(self, "_relationship_filter")
+	var relationships = DiscordLink.S_GodotcordRelationshipManager.get_relationships()
 	for relationship in relationships:
 		var instance     := USER_BUTTON.instance()
 		instance.mode     = instance.Mode.Invite
@@ -95,14 +95,14 @@ func pause_invite() -> void:
 	thread = Thread.new()
 	thread.start(self, "set_invite_list_data")
 
-func _relationship_filter(relationship : GodotcordRelationship) -> bool:
-	return relationship.type == GodotcordRelationship.FRIEND
+func _relationship_filter(relationship) -> bool:
+	return relationship.type == DiscordLink.S_GodotcordRelationship.FRIEND
 
 func set_invite_list_data(_data) -> void:
 	for child in $invite/align/top_bottom/top/vertical.get_children():
 		if (! child.is_queued_for_deletion()):
-			GodotcordUserManager.get_user(child.user_id)
-			var user : GodotcordUser = yield(GodotcordUserManager, "get_user_callback")
+			DiscordLink.S_GodotcordUserManager.get_user(child.user_id)
+			var user = yield(DiscordLink.S_GodotcordUserManager, "get_user_callback")
 			child.set_name(user.name)
 			child.set_discriminator(int(user.discriminator))
 			child.set_avatar(user.avatar)
@@ -117,7 +117,7 @@ func pause_menu() -> void:
 # Invite.
 
 func invite_user(user_id : int) -> void:
-	GodotcordActivityManager.send_invite(user_id, GodotcordActivity.JOIN, "")
+	DiscordLink.S_GodotcordActivityManager.send_invite(user_id, DiscordLink.S_GodotcordActivity.JOIN, "")
 
 
 func invite_cancel() -> void:

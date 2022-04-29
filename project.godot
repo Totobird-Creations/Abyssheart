@@ -28,14 +28,12 @@ _global_script_class_icons={
 
 config/name="Abyssheart"
 config/description="A survival game, taking place within a cave."
-run/main_scene="res://main/menu/main.tscn"
+run/main_scene="res://main/boot/boot.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="totobird_creations.abyssheart"
-boot_splash/image="res://assets/texture/empty.png"
+boot_splash/show_image=false
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
-config/macos_native_icon="res://icon.png"
-config/windows_native_icon="res://icon.png"
 
 [autoload]
 
@@ -180,8 +178,8 @@ multiplayer_accept_join_request={
 
 [physics]
 
-common/enable_pause_aware_picking=true
 3d/smooth_trimesh_collision=true
+common/enable_pause_aware_picking=true
 
 [rendering]
 

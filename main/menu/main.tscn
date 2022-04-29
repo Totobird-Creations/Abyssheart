@@ -447,7 +447,6 @@ gui_disable_input = true
 
 [node name="ground" type="MeshInstance" parent="background/viewport/background"]
 mesh = SubResource( 2 )
-material/0 = null
 
 [node name="main" type="Spatial" parent="background/viewport/background"]
 

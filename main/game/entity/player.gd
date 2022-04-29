@@ -60,7 +60,7 @@ func generate_data(sub : bool = true, data : Dictionary = {}) -> Dictionary:
 
 
 
-func _physics_process(delta : float) -> void:
+func _physics_process(_delta : float) -> void:
 	if (controlling):
 		input_vector = Vector2(
 			Input.get_action_strength("player_move_forward") - Input.get_action_strength("player_move_backward"),

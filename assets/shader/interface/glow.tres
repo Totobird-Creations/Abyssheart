@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+
+
+uniform float power      = 2.0;
+uniform float multiplier = 1.5;
+
+
+
+void fragment() {
+	COLOR.a = clamp(
+		pow(1.0 - distance(UV, vec2(0.5)) * 2.0, power) * multiplier,
+		0.0, 1.0
+	);
+}
+"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/power = 2.0
+shader_param/multiplier = 1.5

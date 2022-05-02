@@ -21,7 +21,7 @@ uniform_name = "Power"
 
 [resource]
 code = "shader_type spatial;
-render_mode specular_schlick_ggx, async_visible, unshaded;
+render_mode specular_schlick_ggx, unshaded;
 
 uniform vec4 Colour : hint_color;
 uniform float Power;

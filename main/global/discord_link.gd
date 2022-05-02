@@ -2,14 +2,6 @@ extends Node
 
 
 
-var S_Godotcord
-var S_GodotcordActivityManager
-var S_GodotcordActivity
-var S_GodotcordRelationshipManager
-var S_GodotcordRelationship
-var S_GodotcordUserManager
-var S_NetworkedMultiplayerGodotcord
-
 const PATH_PLAYER : String = "res://main/game/entity/player.tscn"
 
 enum NotificationType {
@@ -79,13 +71,13 @@ func set_game_state(value : int, secret : String = "") -> void:
 
 			GameState.GameHost:
 				if (discord_active):
-					network_peer = S_NetworkedMultiplayerGodotcord.new()
+					network_peer = NetworkedMultiplayerGodotcord.new()
 					network_peer.create_lobby(10, false)
 					get_tree().set_network_peer(network_peer)
 				SceneSwitcher.switch_scene("res://main/game/world.tscn")
 
 			GameState.GameClient:
-				network_peer = S_NetworkedMultiplayerGodotcord.new()
+				network_peer = NetworkedMultiplayerGodotcord.new()
 				network_peer.join_server_activity(secret)
 				get_tree().set_network_peer(network_peer)
 				SceneSwitcher.switch_scene("res://main/game/world.tscn")
@@ -99,21 +91,14 @@ func set_game_state(value : int, secret : String = "") -> void:
 func start() -> void:
 	has_started = true
 	var error := -1
-	if (Engine.has_singleton("Godotcord")):
-		S_Godotcord                     = Engine.get_singleton("Godotcord")
-		S_GodotcordActivityManager      = Engine.get_singleton("GodotcordActivityManager")
-		S_GodotcordActivity             = Engine.get_singleton("GodotcordActivity")
-		S_GodotcordRelationshipManager  = Engine.get_singleton("GodotcordRelationshipManager")
-		S_GodotcordRelationship         = Engine.get_singleton("GodotcordRelationship")
-		S_GodotcordUserManager          = Engine.get_singleton("GodotcordUserManager")
-		S_NetworkedMultiplayerGodotcord = Engine.get_singleton("NetworkedMultiplayerGodotcord")
-		error = S_Godotcord.init(APPLICATION_ID, S_Godotcord.CreateFlags_NO_REQUIRE_DISCORD)
+	if (true):#Engine.has_singleton("Godotcord")):
+		error = Godotcord.init(APPLICATION_ID, Godotcord.CreateFlags_NO_REQUIRE_DISCORD)
 		if (error == OK):
 			discord_active = true
 			update_activity()
 
-			S_GodotcordActivityManager.connect("activity_join_request", self, "join_request_received")
-			S_GodotcordActivityManager.connect("activity_join", self, "join_pressed_in_discord")
+			GodotcordActivityManager.connect("activity_join_request", self, "join_request_received")
+			GodotcordActivityManager.connect("activity_join", self, "join_pressed_in_discord")
 
 	if (error != OK):
 		discord_active = false
@@ -128,7 +113,7 @@ func _process(delta : float) -> void:
 		return
 
 	if (discord_active):
-		S_Godotcord.run_callbacks()
+		Godotcord.run_callbacks()
 
 	if (len(notification_current.keys()) <= 0 && len(notification_queue) >= 1):
 		notification_current = notification_queue[0]
@@ -184,7 +169,7 @@ func _process(delta : float) -> void:
 
 func update_activity() -> void:
 	if (discord_active):
-		var activity = S_GodotcordActivity.new()
+		var activity := GodotcordActivity.new()
 		activity.details = get_activity_details(game_state)
 		activity.state   = get_activity_state(game_state)
 		match (game_state):
@@ -203,7 +188,7 @@ func update_activity() -> void:
 		activity.start       = start
 		activity.large_image = "spore"
 
-		S_GodotcordActivityManager.set_activity(activity)
+		GodotcordActivityManager.set_activity(activity)
 
 
 func get_activity_details(state : int) -> String:
@@ -237,7 +222,7 @@ func _exit_tree() -> void:
 	if (discord_active):
 		if (is_network_connected()):
 			network_peer.close_connection()
-		S_GodotcordActivityManager.clear_activity()
+		GodotcordActivityManager.clear_activity()
 
 
 
@@ -246,8 +231,8 @@ func _exit_tree() -> void:
 # Somebody has asked if they could join my game.
 func join_request_received(user_name : String, user_id : int) -> void:
 	if (game_state == GameState.GameHost):
-		S_GodotcordUserManager.get_user(user_id)
-		var user = yield(S_GodotcordUserManager, "get_user_callback")
+		GodotcordUserManager.get_user(user_id)
+		var user : GodotcordUser = yield(GodotcordUserManager, "get_user_callback")
 		notification_queue.append({
 			type               = NotificationType.JoinRequest,
 			user_id            = user_id,
@@ -268,7 +253,7 @@ func join_pressed_in_discord(activity_secret : String) -> void:
 func notification_accept() -> void:
 	match (notification_current.type):
 		NotificationType.JoinRequest:
-			S_GodotcordActivityManager.send_request_reply(notification_current.user_id, S_GodotcordActivity.YES)
+			GodotcordActivityManager.send_request_reply(notification_current.user_id, GodotcordActivity.YES)
 		NotificationType.Invite:
 			set_game_state(GameState.GameClient, notification_current.secret)
 		NotificationType.Join:
@@ -282,7 +267,7 @@ func notification_accept() -> void:
 func notification_decline() -> void:
 	match (notification_current.type):
 		NotificationType.JoinRequest:
-			S_GodotcordActivityManager.send_request_reply(notification_current.user_id, S_GodotcordActivity.IGNORE)
+			GodotcordActivityManager.send_request_reply(notification_current.user_id, GodotcordActivity.IGNORE)
 	notification_current = {}
 	$viewport/notification/toggle.play_backwards("main")
 	$viewport/notification/progress/timer.stop()

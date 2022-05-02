@@ -31,9 +31,12 @@ config/description="A survival game, taking place within a cave."
 run/main_scene="res://main/boot/boot.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="totobird_creations.abyssheart"
-boot_splash/show_image=false
+boot_splash/image="res://assets/texture/empty.png"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
+config/macos_native_icon="res://icon.png"
+config/windows_native_icon="res://icon.png"
+boot_splash/show_image=false
 
 [autoload]
 
@@ -179,12 +182,15 @@ multiplayer_accept_join_request={
 
 [physics]
 
-3d/smooth_trimesh_collision=true
 common/enable_pause_aware_picking=true
+3d/smooth_trimesh_collision=true
 
 [rendering]
 
 threads/thread_model=2
 threads/thread_safe_bvh=true
+quality/shadow_atlas/size=8192
+quality/shadow_atlas/cubemap_size=4096
+quality/shadows/filter_mode=2
 environment/default_clear_color=Color( 0, 0, 0, 1 )
 environment/default_environment="res://assets/environment/world.tres"

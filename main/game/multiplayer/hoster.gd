@@ -23,20 +23,21 @@ func _exit_tree() -> void:
 
 
 func created_lobby() -> void:
+	var world := get_game_world()
 	DiscordLink.update_activity()
 	client_connected(DiscordLink.SERVER_ID)
-	#var id := get_next_entity_id()
-	#load_entity(id, PATH_PLAYER)
-	#update_entity(id, {
-	#	controlling = true
-	#})
+	var id : int = world.get_next_entity_id()
+	world.load_entity(id, DiscordLink.PATH_PLAYER, 1)
+	world.update_entity(id, {
+		controlling = true
+	})
 
 
 func client_connected(peer_id : int) -> void:
 	if (DiscordLink.is_host()):
 		var user_id : int = DiscordLink.network_peer.get_user_id_by_peer(peer_id)
-		DiscordLink.S_GodotcordUserManager.get_user(user_id)
-		var user = yield(DiscordLink.S_GodotcordUserManager, "get_user_callback")
+		GodotcordUserManager.get_user(user_id)
+		var user = yield(GodotcordUserManager, "get_user_callback")
 		Logger.network("Connected : " + str(user.name))
 
 		var world := get_game_world()
